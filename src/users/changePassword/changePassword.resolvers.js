@@ -5,7 +5,6 @@ export default {
   Mutation: {
     changePassword: async (_, { email, newPassword }) => {
       try {
-        console.log("changePassword", email, newPassword);
         // Check the user exists.
         const { id: foundUserId } = await client.user.findUnique({
           where: { email },
