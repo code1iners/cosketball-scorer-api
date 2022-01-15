@@ -47,9 +47,7 @@ const runServer = async () => {
 
   // Listen.
   await new Promise((resolve) => httpServer.listen(process.env.PORT, resolve));
-  console.info(
-    `Server ready at ${process.env.BASE_URL}:${process.env.PORT}${server.graphqlPath}`
-  );
+  console.info(`Server running..`);
 };
 
 runServer();
