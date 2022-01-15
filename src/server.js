@@ -6,6 +6,7 @@ import express from "express";
 import http from "http";
 import { graphqlUploadExpress } from "graphql-upload";
 import logger from "morgan";
+import { findUserByToken, protectedResolver } from "./utils/users/users.utils";
 
 /**
  * ### Run API server.
@@ -19,7 +20,16 @@ const runServer = async () => {
   const server = new ApolloServer({
     typeDefs,
     resolvers,
-    context: async (ctx) => {},
+    context: async (ctx) => {
+      if (ctx.req) {
+        const { token } = ctx.req.headers;
+        return {
+          token,
+          protectedResolver,
+          me: await findUserByToken(token),
+        };
+      }
+    },
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
 
@@ -37,7 +47,7 @@ const runServer = async () => {
 
   // Listen.
   await new Promise((resolve) => httpServer.listen(process.env.PORT, resolve));
-  console.log(
+  console.info(
     `Server ready at ${process.env.BASE_URL}:${process.env.PORT}${server.graphqlPath}`
   );
 };

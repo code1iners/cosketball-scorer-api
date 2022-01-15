@@ -8,9 +8,11 @@ export default gql`
   }
 
   type User {
+    id: Int
     email: String!
     username: String!
     password: String!
+    validKey: String
     createdAt: String!
     updatedAt: String!
   }

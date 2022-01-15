@@ -16,16 +16,13 @@ export default {
           ok: false,
           error: {
             code: "404",
-            message: "The user does not found.",
+            message: "The email does not found.",
           },
         };
       }
 
       // Password inspect.
-      const isMatched = await bcrypt.compare(
-        password,
-        foundUser?.dirtyPassword
-      );
+      const isMatched = await bcrypt.compare(password, foundUser?.password);
 
       // Password is not correct?
       if (!isMatched) {
@@ -39,7 +36,10 @@ export default {
       }
 
       // Create JWT access token.
-      const token = await jwt.sign({ id }, process.env.SECRET_KEY);
+      const token = await jwt.sign(
+        { id: foundUser?.id },
+        process.env.SECRET_KEY
+      );
 
       return {
         ok: true,
